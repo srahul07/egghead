@@ -1,0 +1,16 @@
+{
+  "name": "react",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "Start": "webpack-dev-server"
+  },
+  "author": "",
+  "license": "BSD-2-Clause"
+}
