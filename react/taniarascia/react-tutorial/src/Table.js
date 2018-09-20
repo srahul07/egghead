@@ -1,46 +1,41 @@
-import React, { Component } from 'react';
-
+import React, {Component} from 'react';
 
 const TableHeader = () => {
     return (
         <thead>
             <tr>
-                <th> Name </th>
-                <th> Job </th>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Job
+                </th>
             </tr>
         </thead>
     );
 }
 
-const TableBody = () => {
-    return (
-        <tbody>
-            <tr>
-                <th>Charlie</th>
-                <th>Janitor</th>
+const TableBody = props => {
+    const rows = props.characterData.map((row, index) => {
+        return (
+            <tr key={index}>
+                <td>{row.name}</td>
+                <td>{row.job}</td>
             </tr>
-            <tr>
-                <th>Mac</th>
-                <th>Bouncer</th>
-            </tr>
-            <tr>
-                <th>Dee</th>
-                <th>Aspiring actress</th>
-            </tr>
-            <tr>
-                <th>Dennis</th>
-                <th>Bartender</th>
-            </tr>
-        </tbody>
-    );
+        );
+    });
+
+    return <tbody>{rows}</tbody>;
 }
 
 class Table extends Component {
     render() {
+        const {characterData} = this.props;
+
         return (
             <table>
-                <TableHeader />
-                <TableBody />
+                <TableHeader/>
+                <TableBody characterData={characterData}/>
             </table>
         );
     }
