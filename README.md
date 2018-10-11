@@ -1,2 +1,2 @@
-# egghead
-Test courses in js frameworks from egghead
+# Learning in React and js
+Test courses taken while learning react and other js
