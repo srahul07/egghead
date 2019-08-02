@@ -7,9 +7,8 @@
   var https = require('https');
   var url = require('url');
   var StringDecoder = require('string_decoder').StringDecoder;
-  var fs = require('fs');
   var config = require('./config');
-  var handlers = require('./lib/handlers');
+  var fs = require('fs');
 
   // Instantiating HTTP server
   var httpServer = http.createServer(function(req, res) {
@@ -91,13 +90,46 @@
         res.end(payloadString);
 
         // Log the request path
+        // console.log('Request is received on path: ' + trimmedPath + ' with method ' + method + ' and with these query string parameters ', queryStringObject);
+        // console.log("Request received with these headers ", headers);
+        // console.log("Request received with this payload: ", buffer);
         console.log("Returning this reponse: ", statusCode, payloadString);
       });
     });
 };
 
+// Define the handlers
+var handlers = {};
+
+// Sample Handler
+handlers.sample = function(data, callback) {
+  // Callback  a http status code and a payload object
+  callback(406, {'name': 'sample handler'});
+};
+
+// Not found handler
+handlers.notFound = function(data, callback) {
+  callback(404);
+};
+
+// Ping handler
+handlers.ping = function(data, callback) {
+  callback(200);
+}
+
 // Define a request router
 var router = {
+  /* '': handlers.index,
+  'account/create': handlers.accountCreate,
+  'account/edit': handlers.accountEdit,
+  'account/deleted': handlers.accountDeleted,
+  'session/create': handlers.sessionCreate,
+  'session/deleted': handlers.sessionDeleted,
+  'checks/all': handlers.checksList,
+  'checks/create': handlers.checkCreate,
+  'checks/edit': handlers.checkEdit,*/
   'ping' : handlers.ping,
-  'users': handlers.users
+  //  'api/users': handlers.users,
+  //  'api/tokens': handlers.tokens,
+  // 'api/checks': handlers.checks
 };

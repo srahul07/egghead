@@ -1,43 +1,37 @@
-/*
- * This is the primary file for API
- */
+var http = require('http');
+var https = require('https');
+var url = require('url');
+var fs = require('fs');
+var StringDecoder = require('string_decoder').StringDecoder;
 
-  // Dependecies
-  var http = require('http');
-  var https = require('https');
-  var url = require('url');
-  var StringDecoder = require('string_decoder').StringDecoder;
-  var fs = require('fs');
-  var config = require('./config');
-  var handlers = require('./lib/handlers');
+var config = require('./config');
 
-  // Instantiating HTTP server
-  var httpServer = http.createServer(function(req, res) {
+// Instantiating HTTP server
+var httpServer = http.createServer(function(req, res) {
     unifiedServer(req, res);
-  });
+});
 
-  // Start the server, and have it listen on port 3000
-  httpServer.listen(config.httpPort, function(){
+// Start the server, and have it listen on port 3000
+httpServer.listen(config.httpPort, function(){
     console.log("The server is listening on port " + config.httpPort);
-  });
+});
 
-  // Instantiating HTTPS server
-  var httpsServerOptions = {
+// Instantiating HTTPS server
+var httpsServerOptions = {
     'key' : fs.readFileSync('./https/key.pem'),
     'cert' : fs.readFileSync('./https/cert.pem')
-  };
-  var httpsServer = https.createServer(httpsServerOptions, function(req, res){
+};
+var httpsServer = https.createServer(httpsServerOptions, function(req, res){
     unifiedServer(req, res);
-  });
+});
 
-  // Start the HTTPS server
-  httpsServer.listen(config.httpsPort, function() {
+// Start the HTTPS server
+httpsServer.listen(config.httpsPort, function() {
     console.log("The server is listening on port " + config.httpsPort);
-  });
+});
 
-
-  // All the server logic for both http and https server
-  var unifiedServer = function(req, res) {
+// All the server logic for both http and https server
+var unifiedServer = function(req, res) {
     // Get the url and parse it
     var parsedUrl = url.parse(req.url, true)
 
@@ -91,13 +85,28 @@
         res.end(payloadString);
 
         // Log the request path
+        // console.log('Request is received on path: ' + trimmedPath + ' with method ' + method + ' and with these query string parameters ', queryStringObject);
+        // console.log("Request received with these headers ", headers);
+        // console.log("Request received with this payload: ", buffer);
         console.log("Returning this reponse: ", statusCode, payloadString);
       });
-    });
+   });
 };
+
+// Define the handlers
+var handlers = {};
+
+// Not found handler
+handlers.notFound = function(data, callback) {
+  callback(404);
+};
+
+// Ping handler
+handlers.hello = function(data, callback) {
+  callback(200, {'message': "Hello World!"});
+}
 
 // Define a request router
 var router = {
-  'ping' : handlers.ping,
-  'users': handlers.users
+  'hello' : handlers.hello
 };
